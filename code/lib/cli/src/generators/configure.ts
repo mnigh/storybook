@@ -50,12 +50,17 @@ export async function configureMain({
   const tsTemplate = dedent`<<import>>const config<<type>> = <<mainContents>>;
   export default config;`;
 
-  const jsTemplate = dedent`export default <<mainContents>>;`;
+  const jsTemplate = dedent`<<import>>export default <<mainContents>>;`;
 
   const finalTemplate = isTypescript ? tsTemplate : jsTemplate;
 
   const mainJsContents = finalTemplate
-    .replace('<<import>>', `import { StorybookConfig } from '${custom.framework.name}';\n\n`)
+    .replace(
+      '<<import>>',
+      isTypescript
+        ? `import { StorybookConfig } from '${custom.framework.name}';\n\n`
+        : `/** @type { import('${custom.framework.name}').StorybookConfig } */\n`
+    )
     .replace('<<type>>', ': StorybookConfig')
     .replace('<<mainContents>>', JSON.stringify(config, null, 2));
 
