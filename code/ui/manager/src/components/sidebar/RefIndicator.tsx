@@ -7,7 +7,6 @@ import { styled } from '@storybook/theming';
 import { transparentize } from 'polished';
 import { useStorybookApi } from '@storybook/manager-api';
 
-import { MenuItemIcon } from './Menu';
 import type { RefType } from './types';
 
 import type { getStateType } from './utils';
@@ -222,7 +221,7 @@ export const RefIndicator = React.memo(
               tooltip={
                 <TooltipLinkList
                   links={Object.entries(ref.versions).map(([id, href]) => ({
-                    left: href === ref.url ? <MenuItemIcon icon="check" /> : <span />,
+                    icon: href === ref.url ? 'check' : undefined,
                     id,
                     title: id,
                     href,

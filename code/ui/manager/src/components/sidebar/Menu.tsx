@@ -66,6 +66,10 @@ export interface ListItemIconProps {
   imgSrc?: string;
 }
 
+/**
+ * @deprecated Please use `Icons` from `@storybook/components` instead
+ * Component will be removed in SB 8.0
+ */
 export const MenuItemIcon = ({ icon, imgSrc }: ListItemIconProps) => {
   if (icon) {
     return <Icon icon={icon} />;

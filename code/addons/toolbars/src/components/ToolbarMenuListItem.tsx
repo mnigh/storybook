@@ -1,16 +1,8 @@
-import type { ReactNode } from 'react';
+import type { ComponentProps } from 'react';
 import React from 'react';
+import type { ListItem } from '@storybook/components';
 import { Icons } from '@storybook/components';
 import type { ToolbarItem } from '../types';
-
-interface ListItem {
-  id: string;
-  left?: ReactNode;
-  title?: ReactNode;
-  right?: ReactNode;
-  active?: boolean;
-  onClick?: () => void;
-}
 
 type ToolbarMenuListItemProps = {
   currentValue: string;
@@ -28,34 +20,18 @@ export const ToolbarMenuListItem = ({
   currentValue,
 }: ToolbarMenuListItemProps) => {
   const Icon = icon && <Icons style={{ opacity: 1 }} icon={icon} />;
-  const hasContent = left || right || title;
 
-  const Item: ListItem = {
+  const Item: ComponentProps<typeof ListItem> = {
     id: value || currentValue,
     active: currentValue === value,
+    right,
+    title,
+    left,
     onClick,
   };
 
-  if (left) {
-    Item.left = left;
-  }
-
-  if (right) {
-    Item.right = right;
-  }
-
-  if (title) {
-    Item.title = title;
-  }
-
   if (icon && !hideIcon) {
-    if (hasContent && !right) {
-      Item.right = Icon;
-    } else if (hasContent && !left) {
-      Item.left = Icon;
-    } else if (!hasContent) {
-      Item.right = Icon;
-    }
+    Item.left = Icon;
   }
 
   return Item;

@@ -28,8 +28,8 @@ export interface TooltipLinkListProps {
   LinkWrapper?: LinkWrapperType;
 }
 
-const Item: FC<TooltipLinkListProps['links'][number]> = (props) => {
-  const { LinkWrapper, onClick: onClickFromProps, id, ...rest } = props;
+const Item: FC<TooltipLinkListProps['links'][number] & { isIndented?: boolean }> = (props) => {
+  const { LinkWrapper, onClick: onClickFromProps, id, isIndented, ...rest } = props;
   const { title, href, active } = rest;
   const onClick = useCallback(
     (event: SyntheticEvent) => {
@@ -47,19 +47,28 @@ const Item: FC<TooltipLinkListProps['links'][number]> = (props) => {
       href={href}
       id={`list-item-${id}`}
       LinkWrapper={LinkWrapper}
+      isIndented={isIndented}
       {...rest}
       {...(hasOnClick ? { onClick } : {})}
     />
   );
 };
 
-export const TooltipLinkList: FC<TooltipLinkListProps> = ({ links, LinkWrapper }) => (
-  <List>
-    {links.map(({ isGatsby, ...p }) => (
-      <Item key={p.id} LinkWrapper={isGatsby ? LinkWrapper : null} {...p} />
-    ))}
-  </List>
-);
+export const TooltipLinkList: FC<TooltipLinkListProps> = ({ links, LinkWrapper }) => {
+  const hasOneLeftElement = links.some((link) => link.left || link.icon);
+  return (
+    <List>
+      {links.map(({ isGatsby, ...p }) => (
+        <Item
+          key={p.id}
+          LinkWrapper={isGatsby ? LinkWrapper : null}
+          isIndented={hasOneLeftElement}
+          {...p}
+        />
+      ))}
+    </List>
+  );
+};
 
 TooltipLinkList.defaultProps = {
   LinkWrapper: ListItem.defaultProps.LinkWrapper,
